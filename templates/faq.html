@@ -1,0 +1,137 @@
+{% extends 'layout.html' %}
+
+{% block title %}FAQ{% endblock %}
+
+{% block content %}
+<div class="font-mono text-zinc-900 text-5xl mx-10 my-10 md:mx-32">
+    FAQ
+</div>
+
+<div class="flex flex-col justify-center md:justify-left bg-stone-300 text-zinc-900 rounded-lg mx-10 my-8 p-5 md:mx-32">
+    
+    <div class="text-xl">
+        <div class="text-2xl font-bold">
+            How do I save my file? How can I delete my file(s)?
+        </div>
+        <ul class="p-5" style="list-style: disc;">
+            <li class="mb-2">
+                Your work/progress is saved locally in your browser via cookies when you click the save button.
+                It will not get deleted unless you delete your cookies.
+            </li>
+            <li class="mb-2">
+                However, your work is also saved to actual files so it can be shown, downloaded, updated, etc. 
+                Unlike cookies, these files are temporary and are automatically deleted when you close the tab 
+                or if they're more than a day old.
+            </li>
+        </ul>
+    </div>
+    
+    <div class="text-xl mt-3">
+        <div class="text-2xl font-bold">
+            How do I download my file(s)?
+        </div>
+        <ul class="p-5" style="list-style: disc;">
+            <li>
+                To download your work, scroll to the bottom of the editor
+                and find the download button. Choose which file format 
+                you'd like and just press download.
+            </li>
+        </ul>
+    </div>
+
+    <div class="text-xl mt-3">
+        <div class="text-2xl font-bold">
+            I want to download my file in a different format e.g PDF. How may I do this?
+        </div>
+        <ul class="p-5" style="list-style: disc;">
+            <li>
+                Next to the download button, there is a label that says "Markdown file (.md)",
+                click it and a dropdown menu will pop up with a list of formats
+                for you to choose from.
+            </li>
+        </ul>
+    </div>
+
+    <div class="text-xl mt-3">
+        <div class="text-2xl font-bold">
+            I downloaded an HTML file. Why is there no theme?
+        </div>
+        <ul class="p-5" style="list-style: disc;">
+            <li class="mb-2">
+                Download the CSS file if you'd like to keep
+                the theme/styling. Both files (HTML & CSS) have to be in the same 
+                folder for the theme to be applied (or you could rewrite the 
+                location of the css stylesheet in the HTML file).
+            </li>
+            <li>
+                However, if you have downloaded the CSS file and you've
+                made sure it's in the right folder, double check if the 
+                file name hasn't been altered in any way.
+
+                File names are altered automatically from repeated downloads:
+                E.g "123456.CSS (1)" instead of "123456.CSS"
+            </li>
+        </ul>
+    </div>
+
+    <div class="text-xl mt-3">
+        <div class="text-2xl font-bold">
+            How can I upload a file?
+        </div>
+        <ul class="p-5" style="list-style: disc;">
+            <li>
+                Next to the upload button, click the label that says "Choose file (.md)",
+                this will open up your file explorer. Select which file you'd like to upload
+                and then press the upload button.
+            </li>
+        </ul>
+    </div>
+
+    <div class="text-xl mt-3">
+        <div class="text-2xl font-bold">
+            I'm trying to upload a file. Why isn't it working?
+        </div>
+        <ul class="p-5" style="list-style: disc;">
+            <li>
+                To upload a file, it must be a markdown file (.md) and must
+                not exceed 1MB.
+            </li>
+        </ul>
+    </div>
+
+    <div class="text-xl mt-3">
+        <div class="text-2xl font-bold">
+            Why can't I upload images directly instead of using urls?
+        </div>
+        <ul class="p-5" style="list-style: disc;">
+            <li class="mb-2">
+                Unfortunately, this is because of limited storage.
+                I'm using a free service to host my app so there are some constraints.
+            </li>
+            <li class="mb-2">
+                To get around this, I recommend finding a website to host your images on
+                so you can refer to them by links.
+            </li>
+            <li class="mb-2">
+                If you know HTML, a simpler way is to download your project as
+                an HTML file and edit the src in the img tags.
+            </li>
+        </ul>
+    </div>
+
+    <div class="text-xl mt-3">
+        <div class="text-2xl font-bold">
+            I'm on mobile. How can I add lists, links, images, tables, etc.?
+        </div>
+        <ul class="p-5" style="list-style: disc;">
+            <li>
+                Click the button with the "Insert ▼" label.
+                It will open a dropdown menu with the different items you can
+                add to your document.
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+{% endblock %}

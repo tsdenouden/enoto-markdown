@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="bg-zinc-800 text-zinc-100 my-0 p-10">
+    <div class="flex-col text-center items-center">
+        <h1 class="font-bold text-6xl my-5">Enoto</h1>
+        <h1 class="text-4xl mb-10">A web-based markdown editor.</h1>
+        <div class="text-2xl mb-5">
+            <a href="/editor" onclick="preventDelete()" class="bg-zinc-600 px-6 py-3 rounded-lg 
+            hover:bg-zinc-500 transition ease-in-out duration-500">Start Writing</a>
+        </div>
+    </div>
+</div>
+
+<div class="flex flex-col md:flex-row bg-zinc-900 text-zinc-100 w-full p-5">
+    <div class="grow basis-0 text-2xl font-bold mx-5 mt-5">
+        📝 Take notes quickly
+        <div class="text-xl font-normal py-5">
+            Write documents in Markdown, a lightweight markup language 
+            that converts an easy-to-write plain text format into structurally valid HTML.
+        </div>
+    </div>
+    <div class="grow basis-0 text-2xl font-bold mx-5 mt-5">
+        🎨 Style documents easily
+        <div class="text-xl font-normal py-5">
+            Make your documents look good with a few clicks.
+
+            Enoto's theme editor lets anybody create basic stylesheets
+            without prior knowledge
+            of CSS.
+        </div>
+    </div>
+
+    <div class="grow basis-0 text-2xl font-bold mx-5 mt-5">
+        📁 Export to different formats
+        <div class="text-xl font-normal py-5">
+            Don't worry about how to convert your Markdown file, 
+            simply choose your desired file format and hit download.
+        </div>
+    </div>
+</div>
+
+<div class="bg-zinc-900 text-zinc-100 text-xl">
+    <div class="flex flex-col md:flex-row justify-center items-center md:justify-between p-5">
+        <div class="mb-5 md:mb-0">
+            Tristan Shawn den Ouden | 2022 |
+        </div>
+
+        <div class="flex flex-row">
+            <div class="ml-5">
+                <a href="https://github.com/tsdenouden" target="_blank">
+                    <img src="static/images/github_icon.png" class="hover:translate-y-[-5px] transition ease-in-out duratino-300">
+                </a>
+            </div>
+
+            <div class="ml-5">
+                <a href="https://www.youtube.com/channel/UCFtJ-g7eYrA9LUcaSOiBBBA/featured" target="_blank">
+                    <img src="static/images/yt_icon.png" class="h-[32px] w-auto hover:translate-y-[-5px] transition ease-in-out duratino-300">
+                </a>
+            </div>
+            
+            <div class="ml-5">
+                <a href="https://twitter.com/tris687" target="_blank">
+                    <img src="static/images/twitter_icon.png" class="h-[32px] w-auto hover:translate-y-[-5px] transition ease-in-out duratino-300">
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+        // Change background colour of body to bg-zinc-900
+        document.body.style.backgroundColor = "#18181b";
+    });
+
+</script>
+
+{% endblock %}

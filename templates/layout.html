@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Enoto: {% block title %}{% endblock %}</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type ="text/css" href="{{ url_for('static', filename='public/index.css') }}">
+    </head>
+    <body class="bg-stone-100 text-zinc-100 font-[Open_Sans]">
+        <nav class="bg-zinc-900">
+            <div class="flex justify-center md:justify-between items-center bg-transparent mx-5 my-0 p-0 md:mx-32 md:p-4 md:py-6">
+                <div class="inline mx-10 my-5">
+                    <span class="text-xl md:text-3xl font-medium cursor-pointer">
+                        <a href="/" onclick="preventDelete()">Enoto</a>
+                        <img src="/static/images/pen-nib-fill.svg" class="inline">
+                    </span>
+                </div>
+                <div class="inline mx-5 my-2 md:mx-10 md:my-5">
+                    <ul class="flex text-xl md:text-2xl">
+                        <li class="mx-4">
+                            <a href="/about" onclick="preventDelete()" class="hover:text-zinc-50 hover:underline duration-300">About</a>
+                        </li>
+                        <li class="mx-4">
+                            <a href="/faq" onclick="preventDelete()" class="hover:text-zinc-50 hover:underline duration-300">FAQ</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>    
+        </nav>
+        <script>
+            // User's files are automatically deleted when the page is unloaded
+            // unless a function overwrites this to false
+            var delete_files = true;
+            
+            // prevents files from being deleted
+           function preventDelete() {
+                delete_files = false;
+            }
+        </script>
+        
+        {% block content %}{% endblock %}
+        
+        <script>
+            // If user closed tab -> check if files need to be deleted
+            window.addEventListener('beforeunload', (event) => {
+                if (delete_files == true) {
+                    console.log('Delete');
+                    fetch('/delete');
+                } else {
+                    console.log('Save');
+                }
+            });
+        </script>
+    </body>
+</html>

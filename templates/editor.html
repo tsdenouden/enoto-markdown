@@ -1,0 +1,433 @@
+{% extends 'layout.html' %}
+
+{% block title %}Editor{% endblock %}
+
+{% block content %}
+
+<!--Insert Bar-->
+<div class="flex font-bold text-zinc-900 text-xl md:hidden mx-8 mt-5 py-2">
+    <button type="button" id="toggleButton" onclick="toggleInsert()" class="bg-stone-300 rounded-lg px-3 py-1 
+    hover:bg-stone-200 transition ease-in-out duration-300"> Insert ▼ </button>
+</div>
+<div class="md:flex md:justify-between mt-3">
+    <div id="insertBar" class="flex justify-left whitespace-nowrap">
+        <div class="flex flex-col md:flex-row bg-transparent text-zinc-900 w-[358px] md:w-[715px] px-0 md:px-5 mx-8 py-2 md:mx-5 mt-5">
+            <div class="hidden md:flex md:flex-row mb-3 md:mb-0">
+                <div class="font-bold text-xl mr-2">
+                    Insert
+                </div>
+                <div class="font-bold text-xl mr-2">
+                    |
+                </div>
+            </div>
+
+            <div onclick="insert('bold')" class="bg-neutral-200 items-center font-bold rounded-full px-5 py-1 mr-2 mb-2 md:mb-0
+            hover:bg-neutral-300 transition ease-in-out duration-300">
+                Bold
+            </div>
+
+            <div onclick="insert('italic')" class="bg-neutral-200 items-center font-bold rounded-full px-5 py-1 mr-2 mb-2 md:mb-0
+            hover:bg-neutral-300 transition ease-in-out duration-300">
+                Italic
+            </div>
+
+            <div onclick="insert('list')" class="bg-neutral-200 items-center font-bold rounded-full px-5 py-1 mr-2 mb-2 md:mb-0
+            hover:bg-neutral-300 transition ease-in-out duration-300">
+                List
+            </div>
+
+            <div onclick="insert('bullets')" class="bg-neutral-200 items-center font-bold rounded-full px-5 py-1 mr-2 mb-2 md:mb-0
+            hover:bg-neutral-300 transition ease-in-out duration-300">
+                Bulleted List
+            </div>
+            
+            <div onclick="insert('link')" class="bg-neutral-200 items-center font-bold rounded-full px-5 py-1 mr-2 mb-2 md:mb-0
+            hover:bg-neutral-300 transition ease-in-out duration-300">
+                Link
+            </div>
+
+            <div onclick="insert('image')" class="bg-neutral-200 items-center font-bold rounded-full px-5 py-1 mr-2 mb-2 md:mb-0
+            hover:bg-neutral-300 transition ease-in-out duration-300">
+                Image
+            </div>
+
+            <div onclick="insert('table')" class="bg-neutral-200 items-center font-bold rounded-full px-5 py-1 mr-2 mb-2 md:mb-0
+            hover:bg-neutral-300 transition ease-in-out duration-300">
+                Table
+            </div>
+        </div>
+    </div>
+    <div class="hidden md:flex justify-center text-center items-center">
+        <div onclick="editorInput()" class="bg-zinc-800 text-zinc-100 text-2xl font-mono rounded-lg
+        hover:bg-zinc-700 transition ease-in-out duration-300 w-24 mx-8 px-5 py-2">
+            Save
+        </div>
+    </div>
+</div>
+<!--Editor & Preview-->
+<div class="flex flex-col-reverse md:flex-row h-[1000px] md:h-[450px] mx-8 mb-5 mt-2 md:mx-5 md:mb-5 md:mt-2">
+    <div class="sm:w-full h-full md:w-1/2 flex-1">
+        <!--Text Editor-->
+        <form action="/editor" method="post" id="editor" class="w-full h-full">
+            <textarea name="text" id="text" spellcheck="false" class="bg-stone-300 rounded-lg text-zinc-800 
+            font-mono w-full h-full resize-none focus:outline-none p-5">{{ text }}</textarea>
+        </form>
+    </div>
+    <!--Preview-->
+    <div class="sm:w-full md:w-1/2 h-full flex-1 border-solid border-8 rounded-lg">
+        <iframe id="iframe_render" src="{{ mdfile }}" onerror="renderPlaceholder()" class="w-full h-full"></iframe>
+    </div>
+</div>
+<div class="flex flex-col md:hidden mx-8 jusify-center text-center">
+        <div onclick="editorInput()" class="bg-zinc-800 text-zinc-100 text-2xl font-mono rounded-lg
+        hover:bg-zinc-700 transition ease-in-out duration-300 mx-8 px-5 py-2">
+            Save
+        </div>
+</div>
+
+
+<!--Theme Editor-->
+<div class="bg-zinc-700 text-zinc-100 border-solid border-8 border-zinc-600 rounded-lg mx-8 md:mx-5 my-10">
+    <!--Theme Editor Header-->
+    <div class="bg-zinc-800 text-2xl flex justify-center md:justify-between px-8 py-4">
+        <h1 class="mr-5">Theme Editor</h1>
+        <input type="submit" value="Save" onclick="set_theme()" class="bg-zinc-700 rounded-lg px-3 py-1 hover:bg-zinc-600
+        transition ease-in-out duration-500">
+    </div>
+    <!--User interacts with a row/column of different windows each with their own specific input boxes
+    that let the user manipulate the CSS of their markdown/html file-->
+    <form action="/theme" method="post" id="theme_form" class="flex flex-col md:flex-row justify-center md:justify-between m-1 p-1 md:m-5 md:p-5">
+        
+        <!--Body Window -- lets the user style the body of their markdown/html file-->
+        <div class="bg-zinc-600 items-start rounded-lg p-3 mb-1">
+            Body
+            <div class="flex flex-col align-middle bg-zinc-500 rounded-lg px-5 py-5 pr-24 mt-3">
+                <!--Body Window Form-->
+                <label for="font_type" class="mr-3">Font: </label>
+                <select name="font_type" id="font_type" class="bg-zinc-600 rounded-lg focus:outline-none p-1 mb-3">
+                    <option selected value="{{ font_type }}">{{ font_type }}</option>
+                    <option value="Arial, sans-serif">Arial</option>
+                    <option value="Verdana, sans-serif">Verdana</option>
+                    <option value="Helvetica, sans-serif">Helvetica</option>
+                    <option value="Times New Roman, serif">Times New Roman</option>
+                    <option value="Georgia, serif">Georgia</option>
+                    <option value="Garamond, serif">Garamond</option>
+                    <option value="'Courier New', serif">Courier New</option>
+                    <option value="'Brush Script MT', cursive">Brush Script MT</option>
+                </select>
+                    
+                <label for="font_size class=mr-3">Font size: (13-100)</label> 
+                <input type="number" name="font_size" id="font_size" value="{{ font_size }}" min="13" max="100"
+                class="bg-zinc-600 rounded-lg focus:outline-none pl-2 mb-3">
+
+                <label for="body_text_color" class="mr-3">Text color: </label>
+                <input type="color" name="body_text" id="body_text" value="{{ body_text }}" class="bg-zinc-600 rounded-lg mb-3">
+
+                <label for="body_bg_color" class="mr-3">Background color: </label>
+                <input type="color" name="body_bg" id="body_bg" value="{{ body_bg }}" class="bg-zinc-600 rounded-lg mb-1">
+                <div class="pb-14 hidden md:flex"></div>
+            </div>
+        </div>
+
+
+        <!--Title Window -- lets the user style the title of their markdown/html file-->
+        <div class="bg-zinc-600 items-start rounded-lg p-3 mb-1">
+            Title
+            <div class="flex flex-col align-middle bg-zinc-500 rounded-lg px-5 py-5 pr-24 mt-3">
+                <!--Title Window Form-->
+                <label for="title_font" class="mr-3">Font: </label>
+                <select name="title_font" id="title_font" class="bg-zinc-600 rounded-lg focus:outline-none p-1 mb-3">
+                    <option selected value="{{ title_font }}">{{ title_font }}</option>
+                    <option value="Arial, sans-serif">Arial</option>
+                    <option value="Verdana, sans-serif">Verdana</option>
+                    <option value="Helvetica, sans-serif">Helvetica</option>
+                    <option value="Times New Roman, serif">Times New Roman</option>
+                    <option value="Georgia, serif">Georgia</option>
+                    <option value="Garamond, serif">Garamond</option>
+                    <option value="'Courier New', serif">Courier New</option>
+                    <option value="'Brush Script MT', cursive">Brush Script MT</option>
+                </select>
+                    
+                <label for="title_size" class="mr-3">Font size: (13-100)</label> 
+                <input type="number" name="title_size" id="title_size" value="{{ title_size }}" min="13" max="100"
+                class="bg-zinc-600 rounded-lg focus:outline-none pl-2 mb-3">
+
+                <label for="title_color" class="mr-3">Text color: </label>
+                <input type="color" name="title_color" id="title_color" value="{{ title_color }}" class="bg-zinc-600 rounded-lg mb-3">
+                <div class="pb-14 hidden md:flex"></div>
+                <div class="pb-14 hidden md:flex"></div>
+            </div>
+        </div>
+        
+
+        <!--Image Window -- lets the user style the images in their markdown/html file-->
+        <div class="bg-zinc-600 items-start rounded-lg p-3 mb-1">
+            Images
+            <div class="flex flex-col align-middle bg-zinc-500 rounded-lg px-5 py-5 pr-24 mt-3">
+                <!--Image Window Form-->
+                <label for="image_width" class="mr-3">Size: (1-100)</label> 
+                <input type="number" name="image_width" id="image_width" value="{{ image_width }}" min="1" max="100"
+                class="bg-zinc-600 rounded-lg focus:outline-none pl-2 mb-3">
+
+                <label for="image_border" class="mr-3">Border size: (0-100)</label> 
+                <input type="number" name="image_border" id="image_border" value="{{ image_border }}" min="0" max="100"
+                class="bg-zinc-600 rounded-lg focus:outline-none pl-2 mb-3">
+
+                <label for="image_radius" class="mr-3">Crop: (0-100)</label> 
+                <input type="number" name="image_radius" id="image_radius" value="{{ image_radius }}" min="0" max="100"
+                class="bg-zinc-600 rounded-lg focus:outline-none pl-2 mb-3">
+
+                <label for="image_color" class="mr-3">Border color: </label>
+                <input type="color" name="image_color" id="image_color" value="{{ image_color }}" class="bg-zinc-600 rounded-lg mb-3">
+                <div class="pb-14 hidden md:flex"></div>
+            </div>
+        </div>
+
+        <!--Table Window -- lets the user style the table in their markdown/html file-->
+        <div class="bg-zinc-600 items-start rounded-lg p-3 mb-1">
+            Tables
+            <div class="flex flex-col align-middle bg-zinc-500 rounded-lg px-5 py-5 pr-24 mt-3">
+                <!--Table Window Form-->
+                <label for="table_width" class="mr-3">Size: (1-100)</label> 
+                <input type="number" name="table_width" id="table_width" value="{{ table_width }}" min="1" max="100"
+                class="bg-zinc-600 rounded-lg focus:outline-none pl-2 mb-3">
+
+                <label for="table_border" class="mr-3">Border size: (0-100)</label> 
+                <input type="number" name="table_border" id="table_border" value="{{ table_border }}" min="0" max="100"
+                class="bg-zinc-600 rounded-lg focus:outline-none pl-2 mb-3">
+
+                <label for="heading_bg" class="mr-3">Header background color: </label>
+                <input type="color" name="heading_bg" id="heading_bg" value="{{ heading_bg }}" class="bg-zinc-600 rounded-lg mb-3">
+
+                <label for="heading_color" class="mr-3">Header text color: </label>
+                <input type="color" name="heading_color" id="heading_color" value="{{ heading_color }}" class="bg-zinc-600 rounded-lg mb-3">
+                
+                <label for="zebra_color" class="mr-3">Color of even rows: </label>
+                <input type="color" name="zebra_color" id="zebra_color" value="{{ zebra_color }}" class="bg-zinc-600 rounded-lg mb-3">
+            </div>
+        </div>
+
+    </form>
+</div>
+
+
+<!--Upload & Download buttons-->
+<div class="flex flex-col-reverse md:flex-row justify-center items-center md:justify-between mx-0 my-10 md:mx-10">
+    <!--Upload-->
+    <div class="bg-slate-300 rounded-lg w-30 h-16 px-5 py-3">
+        <form action="/upload" method="post" id="upload_form" enctype="multipart/form-data" onchange="uploadFile()" 
+        class="text-zinc-900 w-full h-full">
+            <input onclick="upload_file()" value="Upload" class="text-zinc-100 text-center bg-zinc-900 rounded-lg 
+            w-24 h-full px-5 py-2 mr-1 hover:bg-zinc-700 transition ease-in-out duration-500">
+            <label for="md_upload" class="text-zinc-900">Choose file (.md)</label>
+            <input oninput="file_size(this);" type="file" value="Upload" class="hidden" name="md_upload" id="md_upload">
+        </form>
+    </div>
+    <!--Download-->
+    <div class="bg-slate-300 rounded-lg w-30 h-16 px-5 py-3 mb-5 md:mb-0">
+        <form action="/download" id="download_form" class="text-zinc-900 w-full h-full">
+            <select name="file_type" id="file_type" class="bg-transparent rounded-lg focus:outline-none mr-3">
+                <option value="md">Markdown file (.md)</option>
+                <option value="html">HTML file (.html)</option>
+                <option value="css">CSS file (.css)</option>
+                <option value="pdf">PDF file (.pdf)</option>
+            </select>
+            <input onclick="download_file()" value="Download" id="md_download" class="text-zinc-100 text-center bg-zinc-900 rounded-lg 
+            w-28 h-full px-5 py-2 mr-1 hover:bg-zinc-700 transition ease-in-out duration-500">
+        </form>
+    </div>
+</div>
+
+
+
+<script>
+    // Check if user is on mobile
+    let isMobile = window.matchMedia("(any-pointer:coarse)").matches;
+
+    // Insert bar
+    const insert_bar = document.getElementById("insertBar");
+    const toggle_button = document.getElementById("toggleButton");
+
+    
+    window.addEventListener('DOMContentLoaded', function() {
+        // If user is on mobile -> hide insert bar as soon as the page loads
+        if (isMobile == true)
+        {
+            console.log('Mobile')
+            toggleInsert();
+        } else {
+            console.log('Desktop')
+        }
+    });
+
+
+    // Keeps track of whether insert bar should be displayed or not
+    let display = 1;
+
+    // Toggles the insert bar's visibility
+    // Called when toggle button is clicked or when DOM is loaded on mobile
+    function toggleInsert() {
+        display *= -1;
+        if (display == 1) {
+            insert_bar.style.display = "";
+            toggle_button.innerHTML = " Close ";
+        } else {
+            insert_bar.style.display = "none";
+            toggle_button.innerHTML = " Insert ▼ ";
+        }
+
+    }
+
+
+    // Text editor text area
+    const text_editor = document.getElementById("text");
+    const form = document.getElementById("editor");
+
+    // Set scroll to bottom of file -- temporary fix(?)
+    text_editor.scrollTop = text_editor.scrollHeight;
+
+    // Submit text editor form
+    function editorInput() {
+        delete_files = false;
+        form.submit();
+    }
+
+    // Tab support inside text area
+    var textareas = document.getElementsByTagName('textarea');
+    var count = textareas.length;
+    for (var i=0;i<count;i++) {
+        textareas[i].onkeydown = function(e) {
+            if (e.keyCode==9 || e.which==9) {
+                e.preventDefault();
+                var s = this.selectionStart;
+                this.value = this.value.substring(0,this.selectionStart) + "\t" + this.value.substring(this.selectionEnd);
+                this.selectionEnd = s+"\t".length; 
+            }
+        }
+    }
+
+
+    //Preview Iframe
+    const iframe = document.getElementById("iframe_render");
+
+    // When the iframe fails to load -> render placeholder html
+    function renderPlaceholder() {
+        iframe.src = "/static/user_pages/file.html";
+    }
+
+
+    // Theme editor form
+    const theme = document.getElementById("theme_form");
+
+    // Submit theme editor form
+    function set_theme() {
+        delete_files = false;
+        theme.submit();
+    }
+
+
+    // Remove indentations when inserting tables via insert bar
+    function dedent(callSite, ...args) {
+        function format(str) {
+            let size = -1;
+
+            return str.replace(/\n(\s+)/g, (m, m1) => {
+
+                if (size < 0) {
+                    size = m1.replace(/\t/g, "    ").length;
+                }
+
+                return "\n" + m1.slice(Math.min(m1.length, size));
+            });
+        }
+
+        if (typeof callSite === "string") {
+            return format(callSite);
+        }
+
+        if (typeof callSite === "function") {
+            return (...args) => format(callSite(...args));
+        }
+
+        let output = callSite
+            .slice(0, args.length + 1)
+            .map((text, i) => (i === 0 ? "" : args[i - 1]) + text)
+            .join("");
+
+        return format(output);
+    }
+
+
+    // Insert bar
+    function insert(type) {
+        // String that will be appended to the editor's textarea
+        value = "";
+
+        // Assign whatever the user wants to insert to 'value'
+        switch(type) {
+            case 'bold':
+                value = "**Bold text**";
+                break;
+
+            case 'italic':
+                value = "*Italicized text*";
+                break;
+
+            case 'list':
+                value = "\n\n1. item1\n2. item2\n3. item3";
+                break;
+
+            case 'bullets':
+                value = "\n\n* item1\n* item2\n* item3";
+                break;
+
+            case 'link':
+                value = "[Link Text](Paste url here)";
+                break;
+
+            case 'image':
+                value = "![Image Alt text](Paste image url here)";
+                break;
+
+            case 'table':
+                value = "\n\n" + dedent 
+                        `First Header  | Second Header  |  Third header
+                        ------------- | -------------- | -------------
+                        Content Cell  | Content Cell   | Content Cell
+                        Content Cell  | Content Cell   | Content Cell
+                        Content Cell  | Content Cell   | Content Cell
+                        Content Cell  | Content Cell   | Content Cell
+                        Content Cell  | Content Cell   | Content Cell`;
+                break;
+        }
+
+        text_editor.value += value;
+    }
+
+
+    // Check uploaded file's size
+    function file_size(file) {
+       document.cookie = `fileSize=${file.files[0].size}`;
+    }
+
+
+    // Upload & Download forms
+    const btn_upload = document.getElementById("upload_form"); 
+    const btn_download = document.getElementById("download_form"); 
+
+    // Submit upload form
+    function upload_file() {
+        delete_files = false;
+        btn_upload.submit();
+    }
+
+    // Submit download form
+    function download_file() {
+        delete_files = false;
+        btn_download.submit();
+    }
+
+</script>
+
+
+{% endblock %}
