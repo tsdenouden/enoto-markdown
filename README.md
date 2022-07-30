@@ -80,7 +80,7 @@ Enoto is written mainly in Python. I've used HTML, CSS and JS for the frontend b
 
 ### 🌱 Project structure:
 
-Root foler - Flask app.py & theme editor module  
+Root folder - Flask app.py & theme editor module  
 Templates - HTML pages  
 Static - CSS, images & temporary user files
 
