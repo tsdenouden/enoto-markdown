@@ -86,6 +86,6 @@ Static - CSS, images & temporary user files
 
 ## What I've learnt & final thoughts
 
-I had a lot fun learning how to make this web app, I learnt a lot from this project. I'm also glad I decided to learn Tailwind, it made writing CSS a whole lot more fun for me and I now have a better understanding of how web pages are organised.
+I had a lot fun coding this web app, and I learnt a lot from this project. I'm also glad I decided to learn Tailwind, it made writing CSS a whole lot more fun for me and I now have a better understanding of how web pages are organised.
 
 I would definitely like to improve this in the future, I think if I had to work on this project again I would take the time to learn a Javascript UI framework like React or Vue. I would also make the file preview realtime instead of requiring the user to save their file.
