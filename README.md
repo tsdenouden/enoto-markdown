@@ -3,7 +3,7 @@
 
 ## Enoto is a web-based Markdown editor with an easy-to-use theme editor.
 
-The latest version of Enoto can be found at: [enoto-markdown.herokuapp.com](enoto-markdown.herokuapp.com).
+The latest version of Enoto can be found [here](https://enoto-markdown.herokuapp.com).
 
 ## Features:
 
