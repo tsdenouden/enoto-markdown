@@ -9,13 +9,13 @@ The latest version of Enoto can be found [here](https://enoto-markdown.herokuapp
 
 #### 📝 Text editor
 Users write Markdown inside the text editor. When they click save, their Markdown string is converted to HTML using the parser and saved
-to the server as a temporary HTML file. This file is then read by the Preview and rendered on to the screen.
+to the server as a temporary HTML file. This file is then read by the preview and rendered on to the screen.
 
 #### 🎨 Theme editor
 Users can style their document by using the theme editor. They simply select a few options, enter some values and upon saving the theme, Enoto will pass their input into a CSS template and save it to a temporary CSS file. The user's stylesheet is automatically linked to their Markdown file when the text editor is rendered for the first time.
 
 #### 🧾 Insert bar
-Users can append commmon Markdown syntax to their string in the text editor.
+Users can append common Markdown syntax to their string in the text editor.
 
 * Bold, Italic Text
 * Lists: numbered lists & bulleted lists
@@ -39,7 +39,7 @@ Users can download their file in a few formats.
 
 Users can upload Markdown files as long as it doesn't exceed the 1MB limit.
 
-#### How user's data & files are saved
+#### 🐱‍💻How user data & files are saved
 Most of the user's input/information is saved locally on their browser via cookies. However, their input is also saved to actual files on the server so it can be shown, downloaded, updated, etc. Unlike cookies, these files are temporary and are automatically deleted when the user closes the web app or when the files are more than a day old.
 
 ## 💻 Tech stack
