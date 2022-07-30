@@ -18,12 +18,12 @@ Users can style their document by using the theme editor. They simply select a f
 Users can append commmon Markdown syntax to their string in the text editor.
 
 * Bold, Italic Text
-* Lists: Numbered lists & bulleted lists
+* Lists: numbered lists & bulleted lists
 * Links
 * Images
 * Tables
 
-Additionally, on mobile & smaller screen sizes, the way the Insert bar is presented to the user is modified by a few Javascript functions.
+Additionally, on mobile & smaller screen sizes, the way the insert bar is presented to the user is modified by a few Javascript functions.
 Instead of being an array of buttons, it becomes a dropdown menu that can be open & closed. On mobile, this dropdown menu is always invisible when the DOM is first loaded.
 
 #### 🔽 Download Files
@@ -54,7 +54,7 @@ Languages: HTML, CSS, Javascript, Python
 ## 📱 Mobile support
 
 Enoto uses breakpoints in Tailwind to apply different utility classes
-based on the user's screen size to create responsive design.
+based on the user's screen size to create responsive design.  
 Additionally, Enoto uses Javascript to detect whether the user is on Desktop or on Mobile, and change how certain things are displayed & interacted with.
 
 ## 🛠 Web server hosting
@@ -80,8 +80,8 @@ Enoto is written mainly in Python. I've used HTML, CSS and JS for the frontend b
 
 ### 🌱 Project structure:
 
-Root foler - Flask app.py & theme editor module
-Templates - HTML pages
+Root foler - Flask app.py & theme editor module  
+Templates - HTML pages  
 Static - CSS, images & temporary user files
 
 ## What I've learnt & final thoughts
