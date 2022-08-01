@@ -33,7 +33,7 @@ Users can download their file in a few formats.
 * .MD
 * .HTML
 * .CSS
-* .PDF (PDFs aren't availble on the live web app, however, they do work.)
+* .PDF (PDFs aren't availble on the live web app, however, it does work.)
 
 #### 🔼 Upload Files
 
