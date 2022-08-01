@@ -55,6 +55,11 @@
             hover:bg-neutral-300 transition ease-in-out duration-300">
                 Table
             </div>
+
+            <div onclick="insert('theme')" class="bg-neutral-200 items-center font-bold rounded-full px-5 py-1 mr-2 mb-2 md:mb-0
+            hover:bg-neutral-300 transition ease-in-out duration-300">
+                Link to Theme
+            </div>
         </div>
     </div>
     <div class="hidden md:flex justify-center text-center items-center">
@@ -397,6 +402,17 @@
                         Content Cell  | Content Cell   | Content Cell
                         Content Cell  | Content Cell   | Content Cell
                         Content Cell  | Content Cell   | Content Cell`;
+                break;
+            
+            case 'theme':
+                cookies = document.cookie
+                    .split(';')
+                    .map(cookie => cookie.split('='))
+                    .reduce((accumulator, [key,value]) =>
+                    ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }),
+                    {});
+                md_file_id = cookies.md_file;
+                value = '\n\n' + '<!-- Link to Theme: --> \n' + '<link rel="stylesheet" href="' + md_file_id + '.css' + '">' + '\n\n';
                 break;
         }
 
