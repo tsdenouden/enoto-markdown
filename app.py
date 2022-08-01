@@ -1,21 +1,16 @@
 from flask import Flask, current_app, render_template, redirect, request, make_response, send_from_directory
-
-import markdown
-
-from markdown.extensions.tables import TableExtension
-
-from random import randint
+from werkzeug.utils import secure_filename
 
 import os
 
-from werkzeug.utils import secure_filename
-
+import markdown
+from markdown.extensions.tables import TableExtension
 import theme_editor
 
 from html2image import Html2Image
-
 from PIL import Image
 
+from random import randint
 from datetime import datetime
 
 
@@ -223,12 +218,14 @@ def download_file():
     file_type = request.args.get("file_type")
         
     # Write markdown file
-    user_text = request.cookies.get("md_text")
-    md_file = format_address(file_id, "md")
-    file_md = open(md_file, "w")
-    file_md.write(user_text)
-    file_md.close()
-        
+    if file_type == "md":
+        user_text = request.cookies.get("md_text")
+        md_file = format_address(file_id, "md")
+        file_md = open(md_file, "w")
+        file_md.write(user_text)
+        file_md.close()
+       
+    # Write pdf file
     if file_type == "pdf":
         # Address of pdf file
         pdf_file = format_address(file_id, "pdf")
@@ -282,29 +279,11 @@ def upload_file():
             except:
                 return redirect("/editor")
             
-            # Check if filename meets requirements & make filename secure
-            if not file_name_check(md_upload.filename):
-                return redirect("/editor")
-            else:
-                md_upload_secure = secure_filename(md_upload.filename)
-            
-            # Save user's file on server
-            md_upload.save(os.path.join(app.config["UPLOAD_FILES"], md_upload_secure))
-            
-            # Get both newly uploaded markdown file & user's current html file:
-            upload_file = "static/upload_files/" + md_upload_secure
-            user_file = format_address(request.cookies.get("md_file"), "html")
-            
-            # Overwrite html file with uploaded file
-            user_text = copy_file(upload_file, user_file)
-            
-            # Build response
-            res = make_response(render_template("editor.html", text=user_text, mdfile=user_file), 200)
+            # Get contents of uploaded file & save it to cookie
+            user_text = md_upload.read()
+            res = redirect("/editor")
             res.set_cookie("md_text", user_text)
             
-            # Delete user's uploaded file
-            os.remove(os.path.join(app.config["UPLOAD_FILES"], md_upload_secure))
-            # Return response
             return res
         # Refresh page
         return redirect("/editor")
@@ -370,39 +349,12 @@ def clean_files():
                 os.remove(os.path.join(file_dir, file))
 
 
-# Copies the uploaded markdown file to the user's temp html file
-# And converts each line of markdown to html using the parser
-# Returns the markdown text
-def copy_file(input_file, output_file):
-    md_text = ""
-    # Overwrite the output file with the input file
-    with open(input_file, 'r') as infile:
-        with open(output_file, 'w') as outfile:
-            for line in infile:
-                md_text += line
-                outfile.write(markdown.markdown(line))
-    # Return lines of markdown
-    return md_text
-
-
 # Check if file size is below the limit (1mb)
 def file_size_check(size):
     if int(size) <= app.config["MAX_MD_SIZE"]:
         return True
     else:
         return False
-
-
-# Checks if a filename meets certain requirements
-def file_name_check(filename):
-    # Reject files without a filename or files without a '.' to delineate filetype
-    if filename == "" or not '.' in filename:
-        return False
-    # Reject non markdown files
-    elif filename.rsplit('.',1)[1] != "md":
-        return False
-    else:
-        return True
 
 
 # Used to generate a file id
