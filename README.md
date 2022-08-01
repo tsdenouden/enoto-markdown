@@ -33,7 +33,7 @@ Users can download their file in a few formats.
 * .MD
 * .HTML
 * .CSS
-* .PDF
+* .PDF (PDFs aren't availble on the version of the app I'm hosting, however, they do work.)
 
 #### 🔼 Upload Files
 
