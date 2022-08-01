@@ -1070,13 +1070,15 @@ video {
   outline-offset: 2px;
 }
 
-@media (min-width: 640px) {
-  .sm\:w-full {
-    width: 100%;
+@media (min-width: 1200px) {
+  .md\:fixed {
+    position: fixed;
   }
-}
 
-@media (min-width: 768px) {
+  .md\:bottom-0 {
+    bottom: 0px;
+  }
+
   .md\:m-5 {
     margin: 1.25rem;
   }
@@ -1178,3 +1180,4 @@ video {
     line-height: 2rem;
   }
 }
+
