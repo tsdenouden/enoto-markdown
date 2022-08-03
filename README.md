@@ -84,7 +84,7 @@ Root folder - Flask app.py & theme editor module
 Templates - HTML pages  
 Static - CSS, images & temporary user files
 
-## What I've learnt & final thoughts
+## Final thoughts
 
 I had a lot fun coding this web app, and I learnt a lot from this project. I'm also glad I decided to learn Tailwind, it made writing CSS a whole lot more fun for me and I now have a better understanding of how web pages are organised.
 
