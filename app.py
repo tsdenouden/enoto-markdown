@@ -1,18 +1,18 @@
 from flask import Flask, current_app, render_template, redirect, request, make_response, send_from_directory
-from werkzeug.utils import secure_filename
 
 import os
 
 import markdown
 from markdown.extensions.tables import TableExtension
+
 import theme_editor
+import json
 
 from html2image import Html2Image
 from PIL import Image
 
 from random import randint
 from datetime import datetime
-
 
 
 # If user visits incorrect url or any other error occurs -> redirect them to the home page
@@ -32,22 +32,44 @@ app.config.update(
 )
 
 
-
 # Render home page
 @app.route('/')
 def index():
     # Build response
     res = make_response(render_template("index.html"), 200)
-    
-    # If user doesn't have a file id -> generate file id
-    # This id will later be used to create temporary files on the server
+
     if request.cookies.get("md_file") == None:
+        # Create file id
         md_file_id = str_random_gen(9)
         res.set_cookie("md_file", md_file_id)
 
-        # Creates placeholder text in the editor. Also links the user's HTML file to their CSS file.
-        user_text = '<!-- Link to Theme: --> \n' + '<link rel="stylesheet" href="' + md_file_id + '.css' + '">' + '\n\n' + 'Start writing here.'
+        # Link HTML file to User's Stylesheet
+        user_text = f'<!--Link to Theme: -->\n<link rel="stylesheet" href="{md_file_id}.css">\n\nStart writing here.'
         res.set_cookie("md_text", user_text)
+
+        # Reset theme editor dict
+        user_css = dict.fromkeys([
+            "font_type",
+            "font_size",
+            "body_text",
+            "body_bg",
+            "title_font",
+            "title_size",
+            "title_color",
+            "image_width",
+            "image_border",
+            "image_radius",
+            "image_color",
+            "table_width",
+            "table_border",
+            "heading_bg",
+            "heading_color",
+            "zebra_color"
+        ], "")
+
+        # Set dict to json object
+        user_css = json.dumps(user_css, indent=4)
+        res.set_cookie("css", user_css)
 
     return res
 
@@ -86,43 +108,12 @@ def editor():
         # Get user input & file css to render editor page with the user's changes
         user_text = request.cookies.get("md_text")
         
-        # Body
-        body_font = request.cookies.get("css_font")
-        body_font_size = request.cookies.get("css_font_size")
-        body_text = request.cookies.get("css_body_text")
-        body_bg = request.cookies.get("css_body_bg")
-
-        # Title
-        title_font = request.cookies.get("css_title_font")
-        title_size = request.cookies.get("css_title_size")
-        title_color = request.cookies.get("css_title_color")
-
-        # Images
-        img_border = request.cookies.get("css_image_border")
-        img_color = request.cookies.get("css_image_border_color")
-        img_radius = request.cookies.get("css_image_radius")
-        img_width = request.cookies.get("css_image_width")
-
-        # Tables
-        tbl_width = request.cookies.get("css_table_width")
-        tbl_border = request.cookies.get("css_table_border")
-        tbl_h_bg = request.cookies.get("css_heading_bg")
-        tbl_h = request.cookies.get("css_heading_color")
-        tbl_zebra = request.cookies.get("css_zebra_color")
+        # Get user css JSON object and convert it to dict
+        user_css = request.cookies.get("css")
+        user_css = json.loads(user_css)
 
         # Build response
-        res = make_response(render_template("editor.html", 
-   
-        text=user_text, mdfile=user_file,
-
-        font_type=body_font, font_size=body_font_size, body_text=body_text, body_bg=body_bg,
-
-        title_font=title_font, title_size=title_size, title_color=title_color,
-   
-        image_border=img_border, image_color=img_color, image_radius=img_radius, image_width=img_width,
-
-        table_width=tbl_width, table_border=tbl_border, heading_bg=tbl_h_bg, heading_color=tbl_h, zebra_color=tbl_zebra
-        ), 200)
+        res = make_response(render_template("editor.html", text=user_text, mdfile=user_file, css=user_css), 200)
 
         # Render template  
         return res
@@ -135,66 +126,18 @@ def set_theme():
         # Location of user's css file so the theme editor can write to it
         css_file = format_address(request.cookies.get("md_file"), "css")
         
-        # User's CSS for html <body>
-        body_font = request.form.get("font_type")
-        body_font_size = request.form.get("font_size")
-        body_text = request.form.get("body_text")
-        body_bg = request.form.get("body_bg")
+        # Get user's css from the theme editor
+        user_css = request.form.to_dict()
 
-        # User's CSS for the <h1> tag
-        title_font = request.form.get("title_font")
-        title_size = request.form.get("title_size")
-        title_color = request.form.get("title_color")
-
-        # User's CSS for Images
-        img_border = request.form.get("image_border")
-        img_color = request.form.get("image_color")
-        img_radius = request.form.get("image_radius")
-        img_width = request.form.get("image_width")
-
-        # User's CSS for tables
-        tbl_width = request.form.get("table_width")
-        tbl_border = request.form.get("table_border")
-        tbl_h_bg = request.form.get("heading_bg")
-        tbl_h = request.form.get("heading_color")
-        tbl_zebra = request.form.get("zebra_color")
-
-        # Write to user's css files with this array of values passed as input
-        user_css = [
-            body_font, body_font_size, body_text, body_bg,
-            title_font, title_size, title_color,
-            img_border, img_color, img_radius, img_width,
-            tbl_width, tbl_border, tbl_h_bg, tbl_h, tbl_zebra
-        ]
-
+        # Update document's theme with new css
         theme_editor.setTheme(user_css, css_file)
-        
+
         # Build response
         res = redirect("/editor")
 
-        # Set <body> CSS cookies
-        res.set_cookie("css_font", body_font)
-        res.set_cookie("css_font_size", body_font_size)
-        res.set_cookie("css_body_text", body_text)
-        res.set_cookie("css_body_bg", body_bg)
-
-        # Set <h1> CSS cookies
-        res.set_cookie("css_title_font", title_font)
-        res.set_cookie("css_title_size", title_size)
-        res.set_cookie("css_title_color", title_color)
-
-        # Set <img> CSS cookies
-        res.set_cookie("css_image_border", img_border)
-        res.set_cookie("css_image_border_color", img_color)
-        res.set_cookie("css_image_radius", img_radius)
-        res.set_cookie("css_image_width", img_width)
-
-        # Set <table><th><tr> cookies
-        res.set_cookie("css_table_width", tbl_width)
-        res.set_cookie("css_table_border", tbl_border)
-        res.set_cookie("css_heading_bg", tbl_h_bg)
-        res.set_cookie("css_heading_color", tbl_h)
-        res.set_cookie("css_zebra_color", tbl_zebra)
+        # Convert updated css dict back to JSON object & save as cookie
+        user_css = json.dumps(user_css, indent=4)
+        res.set_cookie("css", user_css)
 
         return res
     else:
@@ -368,4 +311,4 @@ def format_address(file,file_type):
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)

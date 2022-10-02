@@ -68,16 +68,13 @@ def setTheme(user_input, css_file):
         "#": "font_size",
         ">": "text_color",
         "@": "bg_color",
-
         "*": "title_font",
         "^": "title_size",
         "&": "title_color",
-
-        "!": "img_border",
-        "?": "img_border_color",
-        "O": "img_radius",
         "<": "img_width",
-
+        "!": "img_border",
+        "O": "img_radius",
+        "?": "img_border_color",
         "/": "table_width",
         "=": "table_border",
         "[": "heading_bg",
@@ -103,8 +100,11 @@ def setTheme(user_input, css_file):
     css.close()
     
 
-# Update dictionary
+# Update dictionary -- replaces a dict's values with values from another dict
 def updateDict(oldDict, new_values):
+    # put other dict's values in array
+    new_values = list(new_values.values())
+
     i = 0
     for key in oldDict:
         oldDict[key] = new_values[i]

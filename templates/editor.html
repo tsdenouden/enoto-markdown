@@ -110,7 +110,7 @@
                 <!--Body Window Form-->
                 <label for="font_type" class="mr-3">Font: </label>
                 <select name="font_type" id="font_type" class="bg-zinc-600 rounded-lg focus:outline-none p-1 mb-3">
-                    <option selected value="{{ font_type }}">{{ font_type }}</option>
+                    <option selected value="{{ css.font_type }}">{{ css.font_type }}</option>
                     <option value="Arial, sans-serif">Arial</option>
                     <option value="Verdana, sans-serif">Verdana</option>
                     <option value="Helvetica, sans-serif">Helvetica</option>
@@ -122,14 +122,14 @@
                 </select>
                     
                 <label for="font_size class=mr-3">Font size: (13-100)</label> 
-                <input type="number" name="font_size" id="font_size" value="{{ font_size }}" min="13" max="100"
+                <input type="number" name="font_size" id="font_size" value="{{ css.font_size }}" min="13" max="100"
                 class="bg-zinc-600 rounded-lg focus:outline-none pl-2 mb-3">
 
                 <label for="body_text_color" class="mr-3">Text color: </label>
-                <input type="color" name="body_text" id="body_text" value="{{ body_text }}" class="bg-zinc-600 rounded-lg mb-3">
+                <input type="color" name="body_text" id="body_text" value="{{ css.body_text }}" class="bg-zinc-600 rounded-lg mb-3">
 
                 <label for="body_bg_color" class="mr-3">Background color: </label>
-                <input type="color" name="body_bg" id="body_bg" value="{{ body_bg }}" class="bg-zinc-600 rounded-lg mb-1">
+                <input type="color" name="body_bg" id="body_bg" value="{{ css.body_bg }}" class="bg-zinc-600 rounded-lg mb-1">
                 <div class="pb-14 hidden md:flex"></div>
             </div>
         </div>
@@ -142,7 +142,7 @@
                 <!--Title Window Form-->
                 <label for="title_font" class="mr-3">Font: </label>
                 <select name="title_font" id="title_font" class="bg-zinc-600 rounded-lg focus:outline-none p-1 mb-3">
-                    <option selected value="{{ title_font }}">{{ title_font }}</option>
+                    <option selected value="{{ css.title_font }}">{{ css.title_font }}</option>
                     <option value="Arial, sans-serif">Arial</option>
                     <option value="Verdana, sans-serif">Verdana</option>
                     <option value="Helvetica, sans-serif">Helvetica</option>
@@ -154,11 +154,11 @@
                 </select>
                     
                 <label for="title_size" class="mr-3">Font size: (13-100)</label> 
-                <input type="number" name="title_size" id="title_size" value="{{ title_size }}" min="13" max="100"
+                <input type="number" name="title_size" id="title_size" value="{{ css.title_size }}" min="13" max="100"
                 class="bg-zinc-600 rounded-lg focus:outline-none pl-2 mb-3">
 
                 <label for="title_color" class="mr-3">Text color: </label>
-                <input type="color" name="title_color" id="title_color" value="{{ title_color }}" class="bg-zinc-600 rounded-lg mb-3">
+                <input type="color" name="title_color" id="title_color" value="{{ css.title_color }}" class="bg-zinc-600 rounded-lg mb-3">
                 <div class="pb-14 hidden md:flex"></div>
                 <div class="pb-14 hidden md:flex"></div>
             </div>
@@ -171,19 +171,19 @@
             <div class="flex flex-col align-middle bg-zinc-500 rounded-lg px-5 py-5 pr-24 mt-3">
                 <!--Image Window Form-->
                 <label for="image_width" class="mr-3">Size: (1-100)</label> 
-                <input type="number" name="image_width" id="image_width" value="{{ image_width }}" min="1" max="100"
+                <input type="number" name="image_width" id="image_width" value="{{ css.image_width }}" min="1" max="100"
                 class="bg-zinc-600 rounded-lg focus:outline-none pl-2 mb-3">
 
                 <label for="image_border" class="mr-3">Border size: (0-100)</label> 
-                <input type="number" name="image_border" id="image_border" value="{{ image_border }}" min="0" max="100"
+                <input type="number" name="image_border" id="image_border" value="{{ css.image_border }}" min="0" max="100"
                 class="bg-zinc-600 rounded-lg focus:outline-none pl-2 mb-3">
 
                 <label for="image_radius" class="mr-3">Crop: (0-100)</label> 
-                <input type="number" name="image_radius" id="image_radius" value="{{ image_radius }}" min="0" max="100"
+                <input type="number" name="image_radius" id="image_radius" value="{{ css.image_radius }}" min="0" max="100"
                 class="bg-zinc-600 rounded-lg focus:outline-none pl-2 mb-3">
 
                 <label for="image_color" class="mr-3">Border color: </label>
-                <input type="color" name="image_color" id="image_color" value="{{ image_color }}" class="bg-zinc-600 rounded-lg mb-3">
+                <input type="color" name="image_color" id="image_color" value="{{ css.image_color }}" class="bg-zinc-600 rounded-lg mb-3">
                 <div class="pb-14 hidden md:flex"></div>
             </div>
         </div>
@@ -194,21 +194,21 @@
             <div class="flex flex-col align-middle bg-zinc-500 rounded-lg px-5 py-5 pr-24 mt-3">
                 <!--Table Window Form-->
                 <label for="table_width" class="mr-3">Size: (1-100)</label> 
-                <input type="number" name="table_width" id="table_width" value="{{ table_width }}" min="1" max="100"
+                <input type="number" name="table_width" id="table_width" value="{{ css.table_width }}" min="1" max="100"
                 class="bg-zinc-600 rounded-lg focus:outline-none pl-2 mb-3">
 
                 <label for="table_border" class="mr-3">Border size: (0-100)</label> 
-                <input type="number" name="table_border" id="table_border" value="{{ table_border }}" min="0" max="100"
+                <input type="number" name="table_border" id="table_border" value="{{ css.table_border }}" min="0" max="100"
                 class="bg-zinc-600 rounded-lg focus:outline-none pl-2 mb-3">
 
                 <label for="heading_bg" class="mr-3">Header background color: </label>
-                <input type="color" name="heading_bg" id="heading_bg" value="{{ heading_bg }}" class="bg-zinc-600 rounded-lg mb-3">
+                <input type="color" name="heading_bg" id="heading_bg" value="{{ css.heading_bg }}" class="bg-zinc-600 rounded-lg mb-3">
 
                 <label for="heading_color" class="mr-3">Header text color: </label>
-                <input type="color" name="heading_color" id="heading_color" value="{{ heading_color }}" class="bg-zinc-600 rounded-lg mb-3">
+                <input type="color" name="heading_color" id="heading_color" value="{{ css.heading_color }}" class="bg-zinc-600 rounded-lg mb-3">
                 
                 <label for="zebra_color" class="mr-3">Color of even rows: </label>
-                <input type="color" name="zebra_color" id="zebra_color" value="{{ zebra_color }}" class="bg-zinc-600 rounded-lg mb-3">
+                <input type="color" name="zebra_color" id="zebra_color" value="{{ css.zebra_color }}" class="bg-zinc-600 rounded-lg mb-3">
             </div>
         </div>
 
@@ -411,7 +411,7 @@
                     .reduce((accumulator, [key,value]) =>
                     ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }),
                     {});
-                md_file_id = cookies.md_file;
+                md_file_id = cookies.md_file
                 value = '\n\n' + '<!-- Link to Theme: --> \n' + '<link rel="stylesheet" href="' + md_file_id + '.css' + '">' + '\n\n';
                 break;
         }
