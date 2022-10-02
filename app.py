@@ -47,7 +47,7 @@ def index():
         user_text = f'<!--Link to Theme: -->\n<link rel="stylesheet" href="{md_file_id}.css">\n\nStart writing here.'
         res.set_cookie("md_text", user_text)
 
-        # Reset theme editor dict
+        # Create dict for user's css values
         user_css = dict.fromkeys([
             "font_type",
             "font_size",
@@ -67,7 +67,7 @@ def index():
             "zebra_color"
         ], "")
 
-        # Set dict to json object
+        # Convert css dict to JSON object
         user_css = json.dumps(user_css, indent=4)
         res.set_cookie("css", user_css)
 
