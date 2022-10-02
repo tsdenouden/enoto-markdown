@@ -15,7 +15,7 @@ from random import randint
 from datetime import datetime
 
 
-# If user visits incorrect url or any other error occurs -> redirect them to the home page
+# Redirect to home page upon error
 def page_missing(e):
     return redirect("/")
 
@@ -38,12 +38,13 @@ def index():
     # Build response
     res = make_response(render_template("index.html"), 200)
 
+    # If user has no Markdown file, 
     if request.cookies.get("md_file") == None:
-        # Create file id
+        # Create new file id
         md_file_id = str_random_gen(9)
         res.set_cookie("md_file", md_file_id)
 
-        # Link HTML file to User's Stylesheet
+        # Link document to user's stylesheet
         user_text = f'<!--Link to Theme: -->\n<link rel="stylesheet" href="{md_file_id}.css">\n\nStart writing here.'
         res.set_cookie("md_text", user_text)
 
@@ -77,7 +78,7 @@ def index():
 # Render editor 
 @app.route('/editor', methods=['GET', 'POST'])
 def editor():
-    # Clean up files, delete old files
+    # Delete old files
     clean_files()
 
     # Gets address of user's file
@@ -89,26 +90,26 @@ def editor():
 
     if request.method == "POST":
 
-        # Write user's text input into an HTML file.
+        # Parse User's Markdown code into HTML and save to a text file
         user_text = request.form['text']
         file_md = open(user_file, "w")
         file_md.write(markdown.markdown(user_text, extensions=['tables']))
         file_md.close()
 
-        # Build response & save user's text input in a cookie
+        # Build response & save user's Markdown code in a cookie
         res = redirect("/editor")
         res.set_cookie("md_text", user_text)
 
         return res
     else:
-        # If user's temporary html file doesn't exist on server -> render placeholder file
+        # Render error page if user's HTML file doesn't exist
         if os.path.exists(user_file) != True:
             user_file = "static/user_pages/file.html"
         
-        # Get user input & file css to render editor page with the user's changes
+        # Get user's Markdown code
         user_text = request.cookies.get("md_text")
         
-        # Get user css JSON object and convert it to dict
+        # Get user's CSS from JSON object and convert it to dict
         user_css = request.cookies.get("css")
         user_css = json.loads(user_css)
 
@@ -123,19 +124,19 @@ def editor():
 @app.route('/theme', methods=['GET','POST'])
 def set_theme():
     if request.method == "POST":
-        # Location of user's css file so the theme editor can write to it
+        # CSS file location
         css_file = format_address(request.cookies.get("md_file"), "css")
         
-        # Get user's css from the theme editor
+        # Get user's CSS from the theme editor
         user_css = request.form.to_dict()
 
-        # Update document's theme with new css
+        # Update document's theme with new CSS
         theme_editor.setTheme(user_css, css_file)
 
         # Build response
         res = redirect("/editor")
 
-        # Convert updated css dict back to JSON object & save as cookie
+        # Convert updated CSS dict back to JSON object & save as cookie
         user_css = json.dumps(user_css, indent=4)
         res.set_cookie("css", user_css)
 
@@ -276,7 +277,7 @@ def file():
     return render_template("file.html")
 
 
-# Deletes old files
+# Delete old files
 def clean_files():
     # Get directory of all user files
     file_dir = os.path.join(current_app.root_path, app.config["MD_FILES"])
@@ -300,15 +301,15 @@ def file_size_check(size):
         return False
 
 
-# Used to generate a file id
+# Generate file id
 def str_random_gen(power):
     return str(randint(1,10**power))
 
 
-# Used to format a file id into a file address
+# Format file id into a file address
 def format_address(file,file_type):
     return "static/user_pages/" + file + "." + file_type
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
